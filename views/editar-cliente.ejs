@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Editar cliente | Pediatria</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: #f4f7fb;
+                color: #192b43;
+                font:
+                    15px Arial,
+                    sans-serif;
+            }
+            header {
+                background: #fff;
+                border-bottom: 1px solid #e4eaf1;
+                padding: 16px max(calc((100% - 760px) / 2), 24px);
+                display: flex;
+                justify-content: space-between;
+            }
+            .brand {
+                font-weight: bold;
+                color: #175c72;
+            }
+            a {
+                color: #24677d;
+                text-decoration: none;
+            }
+            .wrap {
+                max-width: 760px;
+                margin: 40px auto;
+                padding: 0 24px;
+            }
+            h1 {
+                margin-bottom: 8px;
+            }
+            .muted {
+                color: #728197;
+            }
+            .panel {
+                background: white;
+                border: 1px solid #e5eaf0;
+                border-radius: 12px;
+                padding: 26px;
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+            .field {
+                width: 100%;
+                padding: 11px 12px;
+                border: 1px solid #d5dee8;
+                border-radius: 7px;
+                font-size: 15px;
+                margin-top: 7px;
+            }
+            label {
+                font-weight: 600;
+            }
+            button {
+                border: 0;
+                border-radius: 7px;
+                background: #147a83;
+                color: #fff;
+                padding: 11px 16px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+            .actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 14px;
+                align-items: center;
+                margin-top: 24px;
+            }
+            .alert {
+                background: #fff3e8;
+                color: #8c4d13;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 16px;
+            }
+            @media (max-width: 600px) {
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="brand">Pediatria Â· GestÃ£o de clientes</div>
+            <a href="/clientes">â† Voltar aos clientes</a>
+        </header>
+        <main class="wrap">
+            <h1>Editar cliente</h1>
+            <p class="muted">Atualize os dados de <%= cliente.nome %>.</p>
+            <% if (erro) { %>
+            <div class="alert"><%= erro %></div>
+            <% } %>
+            <form
+                class="panel"
+                action="/clientes/editar/<%= cliente.id %>"
+                method="post"
+            >
+                <div class="grid">
+                    <label
+                        >Nome<input
+                            class="field"
+                            name="nome"
+                            maxlength="150"
+                            value="<%= cliente.nome %>"
+                            required /></label
+                    ><label
+                        >CPF<input
+                            class="field"
+                            name="cpf"
+                            maxlength="14"
+                            value="<%= cliente.cpf %>"
+                            required /></label
+                    ><label
+                        >E-mail<input
+                            class="field"
+                            type="email"
+                            name="email"
+                            maxlength="150"
+                            value="<%= cliente.email %>"
+                            required /></label
+                    ><label
+                        >Telefone<input
+                            class="field"
+                            name="telefone"
+                            maxlength="30"
+                            value="<%= cliente.telefone %>"
+                            required /></label
+                    ><label
+                        >Grupo<select class="field" name="grupo_id">
+                            <option value="">Sem grupo</option>
+                            <% grupos.forEach(grupo => { %>
+                            <% if (Number(cliente.grupo_id) === Number(grupo.id)) { %>
+                            <option value="<%= grupo.id %>" selected>
+                                <%= grupo.nome_grupo %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= grupo.id %>">
+                                <%= grupo.nome_grupo %>
+                            </option>
+                            <% } %>
+                            <% }) %>
+                        </select></label
+                    >
+                </div>
+                <div class="actions">
+                    <a href="/clientes">Cancelar</a
+                    ><button type="submit">Salvar alteraÃ§Ãµes</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

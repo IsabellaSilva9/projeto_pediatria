@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Grupos | Pediatria</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: #f4f7fb;
+                color: #192b43;
+                font:
+                    15px Arial,
+                    sans-serif;
+            }
+            header {
+                background: #fff;
+                border-bottom: 1px solid #e4eaf1;
+                padding: 16px max(calc((100% - 1080px) / 2), 24px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .brand {
+                font-weight: 700;
+                color: #175c72;
+                font-size: 18px;
+            }
+            nav {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+            a {
+                color: #24677d;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .logout {
+                border: 0;
+                background: none;
+                color: #24677d;
+                cursor: pointer;
+                font-size: 15px;
+            }
+            .wrap {
+                max-width: 1080px;
+                margin: 40px auto;
+                padding: 0 24px;
+            }
+            .top {
+                display: flex;
+                align-items: end;
+                justify-content: space-between;
+                margin-bottom: 24px;
+            }
+            h1 {
+                margin: 0 0 6px;
+                font-size: 30px;
+            }
+            .muted {
+                color: #728197;
+                margin: 0;
+            }
+            .panel {
+                background: #fff;
+                border: 1px solid #e5eaf0;
+                border-radius: 12px;
+                padding: 24px;
+                margin-bottom: 22px;
+                box-shadow: 0 5px 20px #18304708;
+            }
+            form.create {
+                display: flex;
+                gap: 12px;
+            }
+            .create input {
+                flex: 1;
+            }
+            .field {
+                display: block;
+                width: 100%;
+                padding: 11px 12px;
+                border: 1px solid #d5dee8;
+                border-radius: 7px;
+                font-size: 15px;
+            }
+            button,
+            .button {
+                border: 0;
+                border-radius: 7px;
+                background: #147a83;
+                color: #fff;
+                padding: 11px 16px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+            .button:hover,
+            button:hover {
+                background: #10656d;
+            }
+            .alert {
+                background: #fff3e8;
+                border: 1px solid #ffd8b3;
+                color: #8c4d13;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 16px;
+            }
+            .table-wrap {
+                overflow: auto;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th,
+            td {
+                text-align: left;
+                padding: 15px 12px;
+                border-bottom: 1px solid #edf0f4;
+            }
+            th {
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: #728197;
+            }
+            td:last-child {
+                text-align: right;
+            }
+            .count {
+                display: inline-block;
+                border-radius: 20px;
+                background: #eaf4f5;
+                padding: 5px 10px;
+                color: #216a72;
+            }
+            .danger {
+                background: #fff;
+                color: #a53b3b;
+                border: 1px solid #f0cccc;
+                padding: 8px 11px;
+            }
+            .danger:hover {
+                background: #fff0f0;
+            }
+            .empty {
+                text-align: center;
+                color: #728197;
+                padding: 28px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="brand">Pediatria · Gestão de clientes</div>
+            <nav>
+                <a href="/clientes">Clientes</a
+                ><a href="/grupos"><strong>Grupos</strong></a
+                ><span><%= usuario.nome %></span>
+                <form action="/logout" method="post">
+                    <button class="logout" type="submit">Sair</button>
+                </form>
+            </nav>
+        </header>
+        <main class="wrap">
+            <div class="top">
+                <div>
+                    <h1>Grupos</h1>
+                    <p class="muted">
+                        Organize os clientes por convênio ou modalidade de
+                        atendimento.
+                    </p>
+                </div>
+            </div>
+            <% if (erro) { %>
+            <div class="alert"><%= erro.replaceAll('+', ' ') %></div>
+            <% } %>
+            <section class="panel">
+                <h2>Novo grupo</h2>
+                <form class="create" action="/grupos/novo" method="post">
+                    <input
+                        class="field"
+                        type="text"
+                        name="nome_grupo"
+                        maxlength="120"
+                        placeholder="Ex.: Convênio ou modalidade"
+                        required
+                    /><button type="submit">Adicionar grupo</button>
+                </form>
+            </section>
+            <section class="panel">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Grupo</th>
+                                <th>Clientes vinculados</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!grupos.length) { %>
+                            <tr>
+                                <td colspan="3" class="empty">
+                                    Nenhum grupo cadastrado.
+                                </td>
+                            </tr>
+                            <% } %>
+                            <% grupos.forEach(grupo => { %>
+                            <tr>
+                                <td>
+                                    <strong><%= grupo.nome_grupo %></strong>
+                                </td>
+                                <td>
+                                    <span class="count"
+                                        ><%= grupo.total_clientes %>
+                                        clientes</span
+                                    >
+                                </td>
+                                <td>
+                                    <% if (Number(grupo.total_clientes) === 0) { %>
+                                    <form
+                                        action="/grupos/deletar/<%= grupo.id %>"
+                                        method="post"
+                                        onsubmit="
+                                            return confirm(
+                                                'Excluir este grupo?'
+                                            );
+                                        "
+                                    >
+                                        <button class="danger" type="submit">
+                                            Excluir
+                                        </button>
+                                    </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

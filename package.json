@@ -1,0 +1,27 @@
+{
+    "name": "projeto_pediatria",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node app.js",
+        "format": "prettier --write app.js db.js gerar-hash.js middleware/**/*.js views/**/*.ejs package.json .prettierrc.json",
+        "format:check": "prettier --check app.js db.js gerar-hash.js middleware/**/*.js views/**/*.ejs package.json .prettierrc.json",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "ejs": "^7.0.2",
+        "express": "^5.3.0",
+        "express-session": "^1.19.0",
+        "pg": "^8.23.1"
+    },
+    "devDependencies": {
+        "prettier": "^3.9.10",
+        "prettier-plugin-ejs": "^1.0.3"
+    }
+}
